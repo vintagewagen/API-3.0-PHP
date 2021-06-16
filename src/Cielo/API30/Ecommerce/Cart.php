@@ -50,7 +50,7 @@ class Cart implements \JsonSerializable, CieloSerializable
                 $itemsInstance = new Items();
                 $itemsInstance->populate($item);
 
-                $this->items [] = $itemsInstance;
+                $this->items[] = $itemsInstance;
             }
         }
     }
@@ -101,6 +101,17 @@ class Cart implements \JsonSerializable, CieloSerializable
     public function getItems()
     {
         return $this->items;
+    }
+
+    /**
+     *  @param Items
+     *  @return $this
+     *  Adiciona um Item ao payload do carrinho
+     */
+    public function addItemInstance(Items $item)
+    {
+        $this->items[] = $item;
+        return $this;
     }
 
     /**
