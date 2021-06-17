@@ -23,6 +23,9 @@ class FraudAnalysis implements \JsonSerializable, CieloSerializable
     /** @var string $sequence */
     private $sequence;
 
+    /** @var int $status */
+    private $status;
+
     /** @var string $sequenceCriteria */
     private $sequenceCriteria;
 
@@ -113,6 +116,7 @@ class FraudAnalysis implements \JsonSerializable, CieloSerializable
     {
 
         $this->provider             = isset($data->Provider) ? $data->Provider : null;
+        $this->status               = isset($data->Status) ? $data->Status : null;
         $this->sequence             = isset($data->Sequence) ? $data->Sequence : null;
         $this->sequenceCriteria     = isset($data->SequenceCriteria) ? $data->SequenceCriteria : null;
         $this->captureOnLowRisk     = isset($data->CaptureOnLowRisk) ? $data->CaptureOnLowRisk : null;
@@ -203,6 +207,26 @@ class FraudAnalysis implements \JsonSerializable, CieloSerializable
     public function setSequence($sequence)
     {
         $this->sequence = $sequence;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+    */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param $status
+     *
+     * @return $this
+    */
+    public function setStatus($status)
+    {
+        $this->status = $status;
 
         return $this;
     }
