@@ -14,7 +14,7 @@ class Browser implements \JsonSerializable, CieloSerializable
     /**
      *  @var string
      */
-    private $browserFingerprint;
+    private $browserFingerPrint;
 
     /** @var string $cookiesAccepted */
     private $cookiesAccepted;
@@ -55,7 +55,7 @@ class Browser implements \JsonSerializable, CieloSerializable
     {
         $this->cookiesAccepted      = isset($data->CookiesAccepted) ? $data->CookiesAccepted : null;
         $this->email                = isset($data->Email) ? $data->Email : null;
-        $this->browserFingerprint   = isset($data->BrowserFingerprint) ? $data->BrowserFingerprint : null;
+        $this->browserFingerPrint   = isset($data->BrowserFingerPrint) ? $data->BrowserFingerPrint : null;
         $this->hostName             = isset($data->HostName) ? $data->HostName : null;
         $this->ipAddress            = isset($data->IpAddress) ? $data->IpAddress : null;
         $this->type                 = isset($data->Type) ? $data->Type : null;
