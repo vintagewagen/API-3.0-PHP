@@ -176,4 +176,14 @@ class CieloEcommerce
 
         return $tokenizeCardRequest->execute($card);
     }
+
+    /**
+     *  Consulta bin
+     */
+    public function binQuery(BinQuery $binQuery)
+    {
+        $binQueryRequest = new BinQueryRequest($this->merchant, $this->environment, $this->logger);
+
+        return $binQueryRequest->execute();
+    }
 }
