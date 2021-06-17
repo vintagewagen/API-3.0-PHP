@@ -179,11 +179,14 @@ class CieloEcommerce
 
     /**
      *  Consulta bin
+     *  @param $cardDigits
+     * 
+     *  @return BinQuery
      */
-    public function binQuery(BinQuery $binQuery)
+    public function binQuery($cardDigits)
     {
         $binQueryRequest = new BinQueryRequest($this->merchant, $this->environment, $this->logger);
 
-        return $binQueryRequest->execute();
+        return $binQueryRequest->execute($cardDigits);
     }
 }
