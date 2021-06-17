@@ -354,6 +354,8 @@ class FraudAnalysis implements \JsonSerializable, CieloSerializable
     public function addMerchnatDefinedFields(MerchantDefinedFields $merchantDefinedField)
     {
         $this->merchantDefinedFields[] = $merchantDefinedField;
+
+        return $this;
     }
 
     /**
