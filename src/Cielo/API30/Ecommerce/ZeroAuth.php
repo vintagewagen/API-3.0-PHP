@@ -123,7 +123,7 @@ class ZeroAuth implements \JsonSerializable, CieloSerializable
     /**
      * @return mixed
     */
-    public function retReturnCode()
+    public function getReturnCode()
     {
         return $this->returnCode;
     }
@@ -133,7 +133,7 @@ class ZeroAuth implements \JsonSerializable, CieloSerializable
      *
      * @return $this
     */
-    public function $retReturnCodeReturnCode)
+    public function setReturnCode()
     {
         $this->returnCode = $returnCode;
 

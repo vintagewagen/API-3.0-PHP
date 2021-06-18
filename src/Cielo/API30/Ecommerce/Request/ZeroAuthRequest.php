@@ -3,6 +3,7 @@
 namespace Cielo\API30\Ecommerce\Request;
 
 use Cielo\API30\Ecommerce\Sale;
+use Cielo\API30\Ecommerce\ZeroAuth;
 use Cielo\API30\Environment;
 use Cielo\API30\Merchant;
 use Psr\Log\LoggerInterface;
