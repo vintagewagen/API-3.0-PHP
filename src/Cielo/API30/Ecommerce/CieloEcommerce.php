@@ -190,4 +190,17 @@ class CieloEcommerce
 
         return $binQueryRequest->execute($cardDigits);
     }
+
+    /**
+     *  Consulta Zero Auth
+     *  @param CreditCard
+     * 
+     *  @return mixed
+     */
+    public function zeroAuth(CreditCard $creditCard) 
+    {
+        $zeroAuthRequest = new ZeroAuthRequest($this->merchant, $this->environment, $this->logger);
+
+        return $zeroAuthRequest->execute($creditCard);
+    }
 }
