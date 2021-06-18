@@ -194,4 +194,19 @@ class BinQuery implements \JsonSerializable, CieloSerializable
         return $this;
     }
 
+    /**
+     * @param $json
+     *
+     * @return BinQuery
+     */
+    public static function fromJson($json)
+    {
+        $object = json_decode($json);
+
+        $binQuery = new BinQuery();
+        $binQuery->populate($object);
+
+        return $binQuery;
+    }
+
 }
