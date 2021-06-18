@@ -11,8 +11,8 @@ use Cielo\API30\Ecommerce\Items;
  */
 class BinQuery implements \JsonSerializable, CieloSerializable
 {
-    /** @var string $Status */
-    private $Status;
+    /** @var string $status */
+    private $status;
 
     /** @var string $provider */
     private $provider;
