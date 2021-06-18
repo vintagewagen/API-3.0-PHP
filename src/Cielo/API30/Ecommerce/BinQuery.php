@@ -11,6 +11,9 @@ use Cielo\API30\Ecommerce\Items;
  */
 class BinQuery implements \JsonSerializable, CieloSerializable
 {
+    /** @var bool $isAccepted */
+    private $isAccepted;
+
     /** @var string $status */
     private $status;
 
@@ -45,6 +48,7 @@ class BinQuery implements \JsonSerializable, CieloSerializable
     */
     public function populate(\stdClass $data)
     {
+        $this->isAccepted              = isset($data->Status) && $data->Status == '00' ? true : false;
         $this->status                  = isset($data->Status) ? $data->Status : null;
         $this->provider                = isset($data->Provider) ? $data->Provider : null;
         $this->cardType                = isset($data->CardType) ? $data->CardType : null;
@@ -52,6 +56,26 @@ class BinQuery implements \JsonSerializable, CieloSerializable
         $this->corporateCard           = isset($data->CorporateCard) ? $data->CorporateCard : null;
         $this->issuer                  = isset($data->Issuer) ? $data->Issuer : null;
         $this->issuerCode              = isset($data->IssuerCode) ? $data->IssuerCode : null;
+    }
+
+    /**
+     * @return mixed
+    */
+    public function getIsAccepted()
+    {
+        return $this->isAccepted;
+    }
+
+    /**
+     * @param $isAccepted
+     *
+     * @return $this
+    */
+    public function setIsAccepted($isAccepted)
+    {
+        $this->isAccepted = $isAccepted;
+
+        return $this;
     }
 
     /**
