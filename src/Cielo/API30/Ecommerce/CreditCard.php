@@ -273,6 +273,8 @@ class CreditCard implements \JsonSerializable, CieloSerializable
     public function setCustomerName($customerName)
     {
         $this->customerName = $customerName;
+
+        return $this;
     }
 
     /**
