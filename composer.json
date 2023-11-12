@@ -8,6 +8,7 @@
   "description": "Fork da integração com a API 3.0 da Cielo",
   "license": "MIT",
   "type": "library",
+  "version": "1.0.0",
   "require": {
     "php": ">=5.6",
     "ext-curl": "*",
