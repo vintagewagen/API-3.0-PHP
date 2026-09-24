@@ -10,6 +10,7 @@ use Cielo\API30\Ecommerce\Request\UpdateSaleRequest;
 use Cielo\API30\Ecommerce\Request\BinQueryRequest;
 use Cielo\API30\Ecommerce\Request\ZeroAuthRequest;
 use Cielo\API30\Merchant;
+use Cielo\API30\Http\HttpClient;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -24,6 +25,8 @@ class CieloEcommerce
 
     private $logger;
 
+    private $httpClient;
+
 	/**
 	 * Create an instance of CieloEcommerce choosing the environment where the
 	 * requests will be send
@@ -34,8 +37,10 @@ class CieloEcommerce
 	 *            The environment: {@link Environment::production()} or
 	 *            {@link Environment::sandbox()}
 	 * @param LoggerInterface|null $logger
+	 * @param HttpClient|null $httpClient
+	 *            Transporte HTTP; o padrão é {@link \Cielo\API30\Http\CurlHttpClient}
 	 */
-    public function __construct(Merchant $merchant, ?Environment $environment = null, ?LoggerInterface $logger = null)
+    public function __construct(Merchant $merchant, ?Environment $environment = null, ?LoggerInterface $logger = null, ?HttpClient $httpClient = null)
     {
         if ($environment == null) {
             $environment = Environment::production();
@@ -44,6 +49,7 @@ class CieloEcommerce
         $this->merchant    = $merchant;
         $this->environment = $environment;
         $this->logger      = $logger;
+        $this->httpClient  = $httpClient;
     }
 
     /**
@@ -63,7 +69,7 @@ class CieloEcommerce
      */
     public function createSale(Sale $sale)
     {
-        $createSaleRequest = new CreateSaleRequest($this->merchant, $this->environment, $this->logger);
+        $createSaleRequest = new CreateSaleRequest($this->merchant, $this->environment, $this->logger, $this->httpClient);
 
         return $createSaleRequest->execute($sale);
     }
@@ -84,7 +90,7 @@ class CieloEcommerce
      */
     public function getSale($paymentId)
     {
-        $querySaleRequest = new QuerySaleRequest($this->merchant, $this->environment, $this->logger);
+        $querySaleRequest = new QuerySaleRequest($this->merchant, $this->environment, $this->logger, $this->httpClient);
 
         return $querySaleRequest->execute($paymentId);
     }
@@ -106,7 +112,7 @@ class CieloEcommerce
      */
     public function getRecurrentPayment($recurrentPaymentId)
     {
-        $queryRecurrentPaymentRequest = new queryRecurrentPaymentRequest($this->merchant, $this->environment, $this->logger);
+        $queryRecurrentPaymentRequest = new queryRecurrentPaymentRequest($this->merchant, $this->environment, $this->logger, $this->httpClient);
 
         return $queryRecurrentPaymentRequest->execute($recurrentPaymentId);
     }
@@ -129,7 +135,7 @@ class CieloEcommerce
      */
     public function cancelSale($paymentId, $amount = null)
     {
-        $updateSaleRequest = new UpdateSaleRequest('void', $this->merchant, $this->environment, $this->logger);
+        $updateSaleRequest = new UpdateSaleRequest('void', $this->merchant, $this->environment, $this->logger, $this->httpClient);
 
         $updateSaleRequest->setAmount($amount);
 
@@ -159,7 +165,7 @@ class CieloEcommerce
      */
     public function captureSale($paymentId, $amount = null, $serviceTaxAmount = null)
     {
-        $updateSaleRequest = new UpdateSaleRequest('capture', $this->merchant, $this->environment, $this->logger);
+        $updateSaleRequest = new UpdateSaleRequest('capture', $this->merchant, $this->environment, $this->logger, $this->httpClient);
 
         $updateSaleRequest->setAmount($amount);
         $updateSaleRequest->setServiceTaxAmount($serviceTaxAmount);
@@ -174,7 +180,7 @@ class CieloEcommerce
      */
     public function tokenizeCard(CreditCard $card)
     {
-        $tokenizeCardRequest = new TokenizeCardRequest($this->merchant, $this->environment, $this->logger);
+        $tokenizeCardRequest = new TokenizeCardRequest($this->merchant, $this->environment, $this->logger, $this->httpClient);
 
         return $tokenizeCardRequest->execute($card);
     }
@@ -187,7 +193,7 @@ class CieloEcommerce
      */
     public function binQuery($cardDigits)
     {
-        $binQueryRequest = new BinQueryRequest($this->merchant, $this->environment, $this->logger);
+        $binQueryRequest = new BinQueryRequest($this->merchant, $this->environment, $this->logger, $this->httpClient);
 
         return $binQueryRequest->execute($cardDigits);
     }
@@ -200,7 +206,7 @@ class CieloEcommerce
      */
     public function zeroAuth(CreditCard $creditCard) 
     {
-        $zeroAuthRequest = new ZeroAuthRequest($this->merchant, $this->environment, $this->logger);
+        $zeroAuthRequest = new ZeroAuthRequest($this->merchant, $this->environment, $this->logger, $this->httpClient);
 
         return $zeroAuthRequest->execute($creditCard);
     }

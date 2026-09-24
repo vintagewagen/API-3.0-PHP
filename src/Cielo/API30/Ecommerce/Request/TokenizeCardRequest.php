@@ -5,6 +5,7 @@ namespace Cielo\API30\Ecommerce\Request;
 use Cielo\API30\Ecommerce\CreditCard;
 use Cielo\API30\Ecommerce\Environment;
 use Cielo\API30\Merchant;
+use Cielo\API30\Http\HttpClient;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -25,10 +26,11 @@ class TokenizeCardRequest extends AbstractRequest
 	 * @param Merchant $merchant
 	 * @param Environment $environment
 	 * @param LoggerInterface|null $logger
+	 * @param HttpClient|null $httpClient
 	 */
-    public function __construct(Merchant $merchant, Environment $environment, ?LoggerInterface $logger = null)
+    public function __construct(Merchant $merchant, Environment $environment, ?LoggerInterface $logger = null, ?HttpClient $httpClient = null)
     {
-        parent::__construct($merchant, $logger);
+        parent::__construct($merchant, $logger, $httpClient);
 
         $this->merchant    = $merchant;
         $this->environment = $environment;

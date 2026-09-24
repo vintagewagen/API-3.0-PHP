@@ -2,6 +2,8 @@
 
 namespace Cielo\API30\Ecommerce\Request;
 
+use Cielo\API30\Http\CurlHttpClient;
+use Cielo\API30\Http\HttpClient;
 use Cielo\API30\Merchant;
 use Psr\Log\LoggerInterface;
 
@@ -15,17 +17,20 @@ abstract class AbstractRequest
 
     private $merchant;
     private $logger;
+    private $httpClient;
 
-	/**
-	 * AbstractSaleRequest constructor.
-	 *
-	 * @param Merchant $merchant
-	 * @param LoggerInterface|null $logger
-	 */
-    public function __construct(Merchant $merchant, ?LoggerInterface $logger = null)
+    /**
+     * AbstractSaleRequest constructor.
+     *
+     * @param Merchant $merchant
+     * @param LoggerInterface|null $logger
+     * @param HttpClient|null $httpClient transporte HTTP; o padrão é {@see CurlHttpClient}
+     */
+    public function __construct(Merchant $merchant, ?LoggerInterface $logger = null, ?HttpClient $httpClient = null)
     {
-        $this->merchant = $merchant;
-        $this->logger = $logger;
+        $this->merchant   = $merchant;
+        $this->logger     = $logger;
+        $this->httpClient = $httpClient ?? new CurlHttpClient();
     }
 
     /**
@@ -48,39 +53,22 @@ abstract class AbstractRequest
     protected function sendRequest($method, $url, ?\JsonSerializable $content = null)
     {
         $headers = [
-            'Accept: application/json',
-            'Accept-Encoding: gzip',
-            'User-Agent: CieloEcommerce/3.0 PHP SDK',
-            'MerchantId: ' . $this->merchant->getId(),
-            'MerchantKey: ' . $this->merchant->getKey(),
-            'RequestId: ' . uniqid()
+            'Accept'      => 'application/json',
+            'User-Agent'  => 'CieloEcommerce/3.0 PHP SDK',
+            'MerchantId'  => $this->merchant->getId(),
+            'MerchantKey' => $this->merchant->getKey(),
+            'RequestId'   => uniqid(),
         ];
 
-        $curl = curl_init($url);
-
-        curl_setopt($curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
-
-        switch ($method) {
-            case 'GET':
-                break;
-            case 'POST':
-                curl_setopt($curl, CURLOPT_POST, true);
-                break;
-            default:
-                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
-        }
+        $body = null;
 
         if ($content !== null) {
-            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($content));
+            $body = json_encode($content);
 
-            $headers[] = 'Content-Type: application/json';
+            $headers['Content-Type'] = 'application/json';
         } else {
-            $headers[] = 'Content-Length: 0';
+            $headers['Content-Length'] = '0';
         }
-
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
         if ($this->logger !== null) {
             $this->logger->debug('Requisição', [
@@ -91,27 +79,24 @@ abstract class AbstractRequest
             );
         }
 
-        $response   = curl_exec($curl);
-        $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        try {
+            $response = $this->httpClient->request($method, $url, $headers, $body);
+        } catch (\RuntimeException $e) {
+            if ($this->logger !== null) {
+                $this->logger->error($e->getMessage());
+            }
+
+            throw $e;
+        }
 
         if ($this->logger !== null) {
             $this->logger->debug('Resposta', [
-                sprintf('Código de status: %s', $statusCode),
-                json_decode($response)
+                sprintf('Código de status: %s', $response->statusCode),
+                json_decode($response->body)
             ]);
         }
 
-        if (curl_errno($curl)) {
-            $message = sprintf('cURL error[%s]: %s', curl_errno($curl), curl_error($curl));
-
-            $this->logger->error($message);
-
-            throw new \RuntimeException($message);
-        }
-
-        curl_close($curl);
-
-        return $this->readResponse($statusCode, $response);
+        return $this->readResponse($response->statusCode, $response->body);
     }
 
     /**
