@@ -72,11 +72,10 @@ abstract class AbstractRequest
 
         if ($this->logger !== null) {
             $this->logger->debug('Requisição', [
-                    sprintf('%s %s', $method, $url),
-                    $headers,
-                    json_decode(preg_replace('/("cardnumber"):"([^"]{6})[^"]+([^"]{4})"/i', '$1:"$2******$3"', json_encode($content)))
-                ]
-            );
+                'request' => sprintf('%s %s', $method, $url),
+                'headers' => LogSanitizer::headers($headers),
+                'body'    => LogSanitizer::json($body),
+            ]);
         }
 
         try {
@@ -91,8 +90,8 @@ abstract class AbstractRequest
 
         if ($this->logger !== null) {
             $this->logger->debug('Resposta', [
-                sprintf('Código de status: %s', $response->statusCode),
-                json_decode($response->body)
+                'status' => $response->statusCode,
+                'body'   => LogSanitizer::json($response->body),
             ]);
         }
 

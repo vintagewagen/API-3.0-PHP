@@ -50,7 +50,7 @@ class UpdateSaleRequest extends AbstractRequest
      */
     public function execute($paymentId)
     {
-        $url    = $this->environment->getApiUrl() . '1/sales/' . $paymentId . '/' . $this->type;
+        $url    = $this->environment->getApiUrl() . '1/sales/' . rawurlencode((string) $paymentId) . '/' . rawurlencode((string) $this->type);
         $params = [];
 
         if ($this->amount != null) {
@@ -61,7 +61,9 @@ class UpdateSaleRequest extends AbstractRequest
             $params['serviceTaxAmount'] = $this->serviceTaxAmount;
         }
 
-        $url .= '?' . http_build_query($params);
+        if ($params !== []) {
+            $url .= '?' . http_build_query($params);
+        }
 
         return $this->sendRequest('PUT', $url);
     }

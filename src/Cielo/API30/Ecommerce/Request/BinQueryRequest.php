@@ -42,7 +42,7 @@ class BinQueryRequest extends AbstractRequest
      */
     public function execute($cardDigits)
     {
-        $url = $this->environment->getApiQueryUrl() . '1/cardBin/'.$cardDigits;
+        $url = $this->environment->getApiQueryUrl() . '1/cardBin/' . rawurlencode((string) $cardDigits);
 
         return $this->sendRequest('GET', $url);
     }
