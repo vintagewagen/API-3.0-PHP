@@ -1,0 +1,11 @@
+{
+    "cardNumber": "4551870000000183",
+    "holder": "Fulano de Tal",
+    "expirationDate": "12/2030",
+    "securityCode": null,
+    "saveCard": false,
+    "brand": "Visa",
+    "cardToken": null,
+    "customerName": "Fulano de Tal",
+    "links": null
+}

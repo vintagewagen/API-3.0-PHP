@@ -1,0 +1,62 @@
+{
+  "MerchantOrderId": "123",
+  "Customer": {
+    "Name": "Fulano de Tal",
+    "Email": "fulano@example.com",
+    "Identity": "12345678909",
+    "IdentityType": "CPF",
+    "Address": {
+      "Street": "Rua Teste",
+      "Number": "123",
+      "ZipCode": "12345987",
+      "City": "Rio de Janeiro",
+      "State": "RJ",
+      "Country": "BRA"
+    }
+  },
+  "Payment": {
+    "ServiceTaxAmount": 0,
+    "Installments": 3,
+    "Interest": "ByMerchant",
+    "Capture": true,
+    "Authenticate": false,
+    "Recurrent": false,
+    "CreditCard": {
+      "CardNumber": "455187******0183",
+      "Holder": "Fulano de Tal",
+      "ExpirationDate": "12/2030",
+      "SaveCard": false,
+      "Brand": "Visa"
+    },
+    "Tid": "0924125303452",
+    "ProofOfSale": "125303452",
+    "AuthorizationCode": "123456",
+    "SoftDescriptor": "LOJA TESTE",
+    "Provider": "Simulado",
+    "IsQrCode": false,
+    "Amount": 15700,
+    "ReceivedDate": "2026-09-24 12:53:03",
+    "CapturedAmount": 15700,
+    "CapturedDate": "2026-09-24 12:53:03",
+    "Status": 2,
+    "IsSplitted": false,
+    "ReturnMessage": "Operation Successful",
+    "ReturnCode": "6",
+    "PaymentId": "24bc8366-fc31-4d6c-8555-17049a836a07",
+    "Type": "CreditCard",
+    "Currency": "BRL",
+    "Country": "BRA",
+    "Links": [
+      {
+        "Method": "GET",
+        "Rel": "self",
+        "Href": "https://apiquerysandbox.cieloecommerce.cielo.com.br/1/sales/24bc8366-fc31-4d6c-8555-17049a836a07"
+      },
+      {
+        "Method": "PUT",
+        "Rel": "void",
+        "Href": "https://apisandbox.cieloecommerce.cielo.com.br/1/sales/24bc8366-fc31-4d6c-8555-17049a836a07/void"
+      }
+    ]
+  }
+}

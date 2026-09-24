@@ -1,0 +1,4 @@
+[
+  { "Code": 126, "Message": "Credit Card Expiration Date is invalid" },
+  { "Code": 101, "Message": "MerchantId is required" }
+]

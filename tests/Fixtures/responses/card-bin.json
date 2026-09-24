@@ -1,0 +1,9 @@
+{
+  "Status": "00",
+  "Provider": "VISA",
+  "CardType": "Crédito",
+  "ForeignCard": false,
+  "CorporateCard": false,
+  "Issuer": "BANCO DO BRASIL",
+  "IssuerCode": "001"
+}

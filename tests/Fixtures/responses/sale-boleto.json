@@ -1,0 +1,23 @@
+{
+  "MerchantOrderId": "789",
+  "Customer": { "Name": "Fulano de Tal" },
+  "Payment": {
+    "Instructions": "Esse é um boleto de exemplo",
+    "ExpirationDate": "2030-12-31",
+    "Url": "https://transactionsandbox.pagador.com.br/post/pagador/reenvia.asp/a5f3181d-c2e2-4df9-a5b4-d8f6edf6bd51",
+    "Number": "123-2",
+    "BoletoNumber": "123-2",
+    "BarCodeNumber": "00096629900000157000494250000000012300656560",
+    "DigitableLine": "00090.49420 50000.000013 23006.565602 6 62990000015700",
+    "Assignor": "Empresa de Teste",
+    "Address": "Rua de Teste",
+    "Identification": "11884926754",
+    "PaymentId": "a5f3181d-c2e2-4df9-a5b4-d8f6edf6bd51",
+    "Type": "Boleto",
+    "Amount": 15700,
+    "Currency": "BRL",
+    "Country": "BRA",
+    "Provider": "Bradesco2",
+    "Status": 1
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "Customer": { "Name": "Fulano de Tal" },
+  "RecurrentPayment": {
+    "RecurrentPaymentId": "c30f5c78-fca2-459c-9f3c-9c4b41b09048",
+    "NextRecurrency": "2026-10-24",
+    "StartDate": "2026-09-24",
+    "EndDate": "2027-09-24",
+    "Interval": "Monthly",
+    "Amount": 15700,
+    "Country": "BRA",
+    "CreateDate": "2026-09-24T00:00:00",
+    "Currency": "BRL",
+    "CurrentRecurrencyTry": 1,
+    "Provider": "Simulado",
+    "RecurrencyDay": 24,
+    "SuccessfulRecurrences": 1,
+    "RecurrentTransactions": [
+      {
+        "PaymentId": "f70948a8-f1dd-4b93-a4ad-90428bcbdb84",
+        "PaymentNumber": 0,
+        "TryNumber": 1
+      }
+    ],
+    "Status": 1
+  }
+}
