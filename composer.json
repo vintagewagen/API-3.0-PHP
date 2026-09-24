@@ -3,7 +3,7 @@
   "description": "Fork da integração com a API 3.0 da Cielo",
   "license": "MIT",
   "type": "library",
-  "version": "1.4.10",
+  "version": "2.0.0",
   "homepage": "https://github.com/vintagewagen/API-3.0-PHP",
   "require": {
     "php": "^8.2",
