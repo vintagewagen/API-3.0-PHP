@@ -14,13 +14,33 @@ class Payment implements \JsonSerializable
 
     const PAYMENTTYPE_DEBITCARD = 'DebitCard';
 
+    /**
+     * @deprecated não consta mais na documentação atual da Cielo.
+     */
     const PAYMENTTYPE_ELECTRONIC_TRANSFER = 'ElectronicTransfer';
 
     const PAYMENTTYPE_BOLETO = 'Boleto';
 
+    const PAYMENTTYPE_PIX = 'Pix';
+
+    /**
+     * @deprecated use PROVIDER_BRADESCO2
+     */
     const PROVIDER_BRADESCO = 'Bradesco';
 
+    /**
+     * @deprecated use PROVIDER_BANCO_DO_BRASIL3
+     */
     const PROVIDER_BANCO_DO_BRASIL = 'BancoDoBrasil';
+
+    /** Provider atual de boleto Bradesco. */
+    const PROVIDER_BRADESCO2 = 'Bradesco2';
+
+    /** Provider atual de boleto Banco do Brasil. */
+    const PROVIDER_BANCO_DO_BRASIL3 = 'BancoDoBrasil3';
+
+    /** Provider de Pix para integrações novas (desde 01/09/2025). */
+    const PROVIDER_CIELO2 = 'Cielo2';
 
     const PROVIDER_SIMULADO = 'Simulado';
 
@@ -109,6 +129,39 @@ class Payment implements \JsonSerializable
     private $instructions;
 
     private $fraudAnalysis;
+
+    // Campos abaixo só vão no payload quando preenchidos (ver jsonSerialize).
+
+    private $initiatedTransactionIndicator;
+
+    private $externalAuthentication;
+
+    private $qrCode;
+
+    private $qrCodeBase64Image;
+
+    private $qrCodeString;
+
+    private $sentOrderId;
+
+    private $issuerTransactionId;
+
+    private $paymentAccountReference;
+
+    private $merchantAdviceCode;
+
+    /** Campos adicionados na 2.0, omitidos do JSON quando nulos. */
+    private const OPTIONAL_FIELDS = [
+        'initiatedTransactionIndicator',
+        'externalAuthentication',
+        'qrCode',
+        'qrCodeBase64Image',
+        'qrCodeString',
+        'sentOrderId',
+        'issuerTransactionId',
+        'paymentAccountReference',
+        'merchantAdviceCode',
+    ];
     /**
      * Payment constructor.
      *
@@ -200,6 +253,25 @@ class Payment implements \JsonSerializable
         $this->demonstrative  = isset($data->Demonstrative) ? $data->Demonstrative : null;
         $this->identification = isset($data->Identification) ? $data->Identification : null;
         $this->instructions   = isset($data->Instructions) ? $data->Instructions : null;
+
+        if (isset($data->InitiatedTransactionIndicator)) {
+            $this->initiatedTransactionIndicator = new InitiatedTransactionIndicator();
+            $this->initiatedTransactionIndicator->populate($data->InitiatedTransactionIndicator);
+        }
+
+        if (isset($data->ExternalAuthentication)) {
+            $this->externalAuthentication = new ExternalAuthentication();
+            $this->externalAuthentication->populate($data->ExternalAuthentication);
+        }
+
+        $this->qrCode                  = isset($data->QrCode) ? (array) $data->QrCode : null;
+        // O provider Pix antigo devolve "QrcodeBase64Image"; o Cielo2, "QrCodeBase64Image".
+        $this->qrCodeBase64Image       = $data->QrCodeBase64Image ?? $data->QrcodeBase64Image ?? null;
+        $this->qrCodeString            = $data->QrCodeString ?? null;
+        $this->sentOrderId             = $data->SentOrderId ?? null;
+        $this->issuerTransactionId     = $data->IssuerTransactionId ?? null;
+        $this->paymentAccountReference = $data->PaymentAccountReference ?? null;
+        $this->merchantAdviceCode      = $data->MerchantAdviceCode ?? null;
     }
 
     /**
@@ -207,7 +279,54 @@ class Payment implements \JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        return get_object_vars($this);
+        $data = get_object_vars($this);
+
+        foreach (self::OPTIONAL_FIELDS as $field) {
+            if ($data[$field] === null) {
+                unset($data[$field]);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Configura o pagamento como Pix pelo provider Cielo2.
+     *
+     * @param int|null $expiration validade do QR Code em segundos (padrão da Cielo: 86400)
+     *
+     * @return $this
+     */
+    public function pix($expiration = null)
+    {
+        $this->setType(self::PAYMENTTYPE_PIX);
+        $this->setProvider(self::PROVIDER_CIELO2);
+        $this->qrCode = $expiration === null ? null : ['Expiration' => $expiration];
+
+        return $this;
+    }
+
+    /**
+     * @param string $category    InitiatedTransactionIndicator::CATEGORY_*
+     * @param string $subcategory InitiatedTransactionIndicator::SUBCATEGORY_*
+     *
+     * @return InitiatedTransactionIndicator
+     */
+    public function initiatedTransactionIndicator($category, $subcategory)
+    {
+        $this->initiatedTransactionIndicator = new InitiatedTransactionIndicator($category, $subcategory);
+
+        return $this->initiatedTransactionIndicator;
+    }
+
+    /**
+     * @return ExternalAuthentication
+     */
+    public function externalAuthentication()
+    {
+        $this->externalAuthentication = new ExternalAuthentication();
+
+        return $this->externalAuthentication;
     }
 
     /**
@@ -1128,5 +1247,97 @@ class Payment implements \JsonSerializable
     {
         $this->fraudAnalysis = $fraudAnalysis;
         return $this;
+    }
+
+    /**
+     * @return InitiatedTransactionIndicator|null
+     */
+    public function getInitiatedTransactionIndicator()
+    {
+        return $this->initiatedTransactionIndicator;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setInitiatedTransactionIndicator(?InitiatedTransactionIndicator $initiatedTransactionIndicator)
+    {
+        $this->initiatedTransactionIndicator = $initiatedTransactionIndicator;
+
+        return $this;
+    }
+
+    /**
+     * @return ExternalAuthentication|null
+     */
+    public function getExternalAuthentication()
+    {
+        return $this->externalAuthentication;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setExternalAuthentication(?ExternalAuthentication $externalAuthentication)
+    {
+        $this->externalAuthentication = $externalAuthentication;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null validade do QR Code Pix, em segundos
+     */
+    public function getQrCodeExpiration()
+    {
+        return $this->qrCode['Expiration'] ?? null;
+    }
+
+    /**
+     * @return string|null imagem do QR Code Pix em base64
+     */
+    public function getQrCodeBase64Image()
+    {
+        return $this->qrCodeBase64Image;
+    }
+
+    /**
+     * @return string|null código Pix copia e cola
+     */
+    public function getQrCodeString()
+    {
+        return $this->qrCodeString;
+    }
+
+    /**
+     * @return string|null txid do Pix
+     */
+    public function getSentOrderId()
+    {
+        return $this->sentOrderId;
+    }
+
+    /**
+     * @return string|null identificador da transação na bandeira
+     */
+    public function getIssuerTransactionId()
+    {
+        return $this->issuerTransactionId;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPaymentAccountReference()
+    {
+        return $this->paymentAccountReference;
+    }
+
+    /**
+     * @return string|null código de retentativa da Mastercard
+     */
+    public function getMerchantAdviceCode()
+    {
+        return $this->merchantAdviceCode;
     }
 }

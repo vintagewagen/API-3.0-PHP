@@ -57,7 +57,7 @@ abstract class AbstractRequest
             'User-Agent'  => 'CieloEcommerce/3.0 PHP SDK',
             'MerchantId'  => $this->merchant->getId(),
             'MerchantKey' => $this->merchant->getKey(),
-            'RequestId'   => uniqid(),
+            'RequestId'   => self::uuid4(),
         ];
 
         $body = null;
@@ -119,16 +119,29 @@ abstract class AbstractRequest
                 $exception = null;
                 $response  = json_decode($responseBody);
 
-                foreach ($response as $error) {
-                    $cieloError = new CieloError($error->Message, $error->Code);
+                // A Cielo devolve [{Code, Message}, ...]; cada erro vira uma exceção encadeada.
+                foreach (is_array($response) ? $response : [] as $error) {
+                    if (!is_object($error)) {
+                        continue;
+                    }
+
+                    $cieloError = new CieloError($error->Message ?? null, $error->Code ?? null);
                     $exception  = new CieloRequestException('Request Error', $statusCode, $exception);
                     $exception->setCieloError($cieloError);
                 }
 
-                throw $exception;
+                throw $exception ?? new CieloRequestException('Request Error', $statusCode);
+            case 401:
+                throw new CieloRequestException('Unauthorized: verifique MerchantId e MerchantKey', 401);
+            case 403:
+                throw new CieloRequestException('Forbidden: o IP de origem não está liberado na Cielo', 403);
             case 404:
                 throw new CieloRequestException('Resource not found', 404, null);
             default:
+                if ($statusCode >= 500) {
+                    throw new CieloRequestException('Cielo server error', $statusCode);
+                }
+
                 throw new CieloRequestException('Unknown status', $statusCode);
         }
 
@@ -141,4 +154,16 @@ abstract class AbstractRequest
      * @return mixed
      */
     protected abstract function unserialize($json);
+
+    /**
+     * RequestId no formato GUID que a Cielo documenta.
+     */
+    private static function uuid4(): string
+    {
+        $bytes = random_bytes(16);
+        $bytes[6] = chr((ord($bytes[6]) & 0x0f) | 0x40);
+        $bytes[8] = chr((ord($bytes[8]) & 0x3f) | 0x80);
+
+        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($bytes), 4));
+    }
 }

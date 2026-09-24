@@ -62,12 +62,36 @@ final class ReadResponseTest extends TestCase
         $this->request()->read(404, '');
     }
 
-    public function testOtherStatusesAreUnknown(): void
+    public function testBadRequestWithoutErrorListStillThrows(): void
+    {
+        foreach (['', 'null', '{"Message":"x"}', '["texto"]'] as $body) {
+            try {
+                $this->request()->read(400, $body);
+                $this->fail('Expected CieloRequestException for ' . $body);
+            } catch (CieloRequestException $e) {
+                $this->assertSame(400, $e->getCode());
+                $this->assertNull($e->getCieloError());
+            }
+        }
+    }
+
+    public static function statuses(): iterable
+    {
+        yield 'unauthorized' => [401, 'Unauthorized: verifique MerchantId e MerchantKey'];
+        yield 'forbidden' => [403, 'Forbidden: o IP de origem não está liberado na Cielo'];
+        yield 'internal error' => [500, 'Cielo server error'];
+        yield 'bad gateway' => [502, 'Cielo server error'];
+        yield 'unavailable' => [503, 'Cielo server error'];
+        yield 'method not allowed' => [405, 'Unknown status'];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('statuses')]
+    public function testStatusMessages(int $status, string $message): void
     {
         $this->expectException(CieloRequestException::class);
-        $this->expectExceptionCode(500);
-        $this->expectExceptionMessage('Unknown status');
+        $this->expectExceptionCode($status);
+        $this->expectExceptionMessage($message);
 
-        $this->request()->read(500, '');
+        $this->request()->read($status, '');
     }
 }

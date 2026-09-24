@@ -50,6 +50,9 @@ class CreditCard implements \JsonSerializable, CieloSerializable
     const DISCOVER = 'Discover';
 
     /**
+     * @deprecated a Cielo encerrou a bandeira Hipercard em 30/06/2025; os
+     *             cartões foram migrados para Mastercard.
+     *
      * Bandeira Hipercard
      */
     const HIPERCARD = 'Hipercard';
@@ -81,6 +84,9 @@ class CreditCard implements \JsonSerializable, CieloSerializable
     /** @var \stdClass $links */
     private $links;
 
+    /** @var CardOnFile|null $cardOnFile */
+    private $cardOnFile;
+
     /**
      * @param string $json
      *
@@ -109,6 +115,11 @@ class CreditCard implements \JsonSerializable, CieloSerializable
         $this->cardToken      = isset($data->CardToken) ? $data->CardToken : null;
         $this->links          = isset($data->Links) ? $data->Links : new \stdClass();
         $this->customerName   = isset($data->CustomerName) ? $data->CustomerName : null;
+
+        if (isset($data->CardOnFile)) {
+            $this->cardOnFile = new CardOnFile();
+            $this->cardOnFile->populate($data->CardOnFile);
+        }
     }
 
     /**
@@ -116,7 +127,45 @@ class CreditCard implements \JsonSerializable, CieloSerializable
      */
     public function jsonSerialize(): array
     {
-        return get_object_vars($this);
+        $data = get_object_vars($this);
+
+        // Campo novo: só vai no payload quando informado.
+        if ($data['cardOnFile'] === null) {
+            unset($data['cardOnFile']);
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param string      $usage  CardOnFile::USAGE_FIRST ou CardOnFile::USAGE_USED
+     * @param string|null $reason CardOnFile::REASON_*, só quando $usage = Used
+     *
+     * @return CardOnFile
+     */
+    public function cardOnFile($usage, $reason = null)
+    {
+        $this->cardOnFile = new CardOnFile($usage, $reason);
+
+        return $this->cardOnFile;
+    }
+
+    /**
+     * @return CardOnFile|null
+     */
+    public function getCardOnFile()
+    {
+        return $this->cardOnFile;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setCardOnFile(?CardOnFile $cardOnFile)
+    {
+        $this->cardOnFile = $cardOnFile;
+
+        return $this;
     }
 
     /**

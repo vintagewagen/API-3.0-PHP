@@ -1,0 +1,23 @@
+{
+  "MerchantOrderId": "pix-1",
+  "Customer": {
+    "Name": "Aline de Souza",
+    "Identity": "12345678909",
+    "IdentityType": "CPF"
+  },
+  "Payment": {
+    "QrCode": { "Expiration": 86400 },
+    "QrCodeBase64Image": "iVBORw0KGgoAAAANSUhEUg==",
+    "QrCodeString": "00020101021226900014br.gov.bcb.pix",
+    "SentOrderId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+    "Amount": 100,
+    "ReceivedDate": "2026-09-24 16:29:52",
+    "Provider": "Cielo2",
+    "Status": 12,
+    "ReturnMessage": "QRCode gerado com sucesso",
+    "ReturnCode": "0",
+    "PaymentId": "5d3a2f1e-1111-4222-8333-944455556666",
+    "Type": "Pix",
+    "Currency": "BRL"
+  }
+}
