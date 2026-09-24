@@ -42,7 +42,7 @@ class ZeroAuth implements \JsonSerializable, CieloSerializable
     /**
      * @return array
     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return get_object_vars($this);
     }
@@ -133,7 +133,7 @@ class ZeroAuth implements \JsonSerializable, CieloSerializable
      *
      * @return $this
     */
-    public function setReturnCode()
+    public function setReturnCode($returnCode)
     {
         $this->returnCode = $returnCode;
 
@@ -180,7 +180,7 @@ class ZeroAuth implements \JsonSerializable, CieloSerializable
         return $this;
     }
 
-    public function fromJson($json)
+    public static function fromJson($json)
     {
         $object = json_decode($json);
 

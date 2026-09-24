@@ -104,7 +104,7 @@ class FraudAnalysis implements \JsonSerializable, CieloSerializable
     /**
      * @return array
     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return get_object_vars($this);
     }

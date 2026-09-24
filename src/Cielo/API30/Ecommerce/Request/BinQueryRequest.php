@@ -24,7 +24,7 @@ class BinQueryRequest extends AbstractRequest
 	 * @param Environment $environment
 	 * @param LoggerInterface|null $logger
 	 */
-    public function __construct(Merchant $merchant, Environment $environment, LoggerInterface $logger = null)
+    public function __construct(Merchant $merchant, Environment $environment, ?LoggerInterface $logger = null)
     {
         parent::__construct($merchant, $logger);
 

@@ -35,7 +35,7 @@ class CieloEcommerce
 	 *            {@link Environment::sandbox()}
 	 * @param LoggerInterface|null $logger
 	 */
-    public function __construct(Merchant $merchant, Environment $environment = null, LoggerInterface $logger = null)
+    public function __construct(Merchant $merchant, ?Environment $environment = null, ?LoggerInterface $logger = null)
     {
         if ($environment == null) {
             $environment = Environment::production();

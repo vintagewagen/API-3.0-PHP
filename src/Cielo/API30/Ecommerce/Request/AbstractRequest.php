@@ -22,7 +22,7 @@ abstract class AbstractRequest
 	 * @param Merchant $merchant
 	 * @param LoggerInterface|null $logger
 	 */
-    public function __construct(Merchant $merchant, LoggerInterface $logger = null)
+    public function __construct(Merchant $merchant, ?LoggerInterface $logger = null)
     {
         $this->merchant = $merchant;
         $this->logger = $logger;
@@ -45,7 +45,7 @@ abstract class AbstractRequest
      * @throws \Cielo\API30\Ecommerce\Request\CieloRequestException
      * @throws \RuntimeException
      */
-    protected function sendRequest($method, $url, \JsonSerializable $content = null)
+    protected function sendRequest($method, $url, ?\JsonSerializable $content = null)
     {
         $headers = [
             'Accept: application/json',

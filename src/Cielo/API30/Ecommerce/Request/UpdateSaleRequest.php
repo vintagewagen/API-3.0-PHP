@@ -31,7 +31,7 @@ class UpdateSaleRequest extends AbstractRequest
 	 * @param Environment $environment
 	 * @param LoggerInterface|null $logger
 	 */
-    public function __construct($type, Merchant $merchant, Environment $environment, LoggerInterface $logger = null)
+    public function __construct($type, Merchant $merchant, Environment $environment, ?LoggerInterface $logger = null)
     {
         parent::__construct($merchant, $logger);
 
