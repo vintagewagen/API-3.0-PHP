@@ -32,7 +32,6 @@ class Passenger implements \JsonSerializable, CieloSerializable
     /**
      * Passenger constructor.
      *
-     * @param null
     */
     public function __construct()
     {

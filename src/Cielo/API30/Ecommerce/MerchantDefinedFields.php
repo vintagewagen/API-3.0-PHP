@@ -20,7 +20,6 @@ class MerchantDefinedFields implements \JsonSerializable, CieloSerializable
     /**
      * MerchantDefinedFields constructor.
      *
-     * @param null
     */
     public function __construct()
     {

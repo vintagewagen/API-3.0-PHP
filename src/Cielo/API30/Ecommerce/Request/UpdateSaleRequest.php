@@ -27,7 +27,7 @@ class UpdateSaleRequest extends AbstractRequest
 	/**
 	 * UpdateSaleRequest constructor.
 	 *
-	 * @param Merchant $type
+	 * @param string $type 'capture' ou 'void'
 	 * @param Merchant $merchant
 	 * @param Environment $environment
 	 * @param LoggerInterface|null $logger
@@ -44,7 +44,7 @@ class UpdateSaleRequest extends AbstractRequest
     /**
      * @param $paymentId
      *
-     * @return null
+     * @return \Cielo\API30\Ecommerce\Payment
      * @throws \Cielo\API30\Ecommerce\Request\CieloRequestException
      * @throws \RuntimeException
      */

@@ -37,7 +37,7 @@ class ZeroAuthRequest extends AbstractRequest
     /**
      * @param $creditCard
      *
-     * @return null
+     * @return \Cielo\API30\Ecommerce\ZeroAuth
      * @throws \Cielo\API30\Ecommerce\Request\CieloRequestException
      * @throws \RuntimeException
      */

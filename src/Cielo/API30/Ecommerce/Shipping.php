@@ -21,7 +21,6 @@ class Shipping implements \JsonSerializable, CieloSerializable
     /**
      * Shipping constructor.
      *
-     * @param null
     */
     public function __construct()
     {

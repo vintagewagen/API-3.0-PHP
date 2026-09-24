@@ -41,22 +41,22 @@ class FraudAnalysis implements \JsonSerializable, CieloSerializable
     /** @var string $fingerPrintId */
     private $fingerPrintId;
 
-    /** @var string $browser */
+    /** @var Browser|null $browser */
     private $browser;
 
-    /** @var string $cart */
+    /** @var Cart|null $cart */
     private $cart;
 
-    /** @var string $merchantDefinedFields */
+    /** @var MerchantDefinedFields[]|null $merchantDefinedFields */
     private $merchantDefinedFields;
 
-    /** @var string $shipping */
+    /** @var Shipping|null $shipping */
     private $shipping;
 
-    /** @var string $travel */
+    /** @var Travel|null $travel */
     private $travel;
 
-    /** @var string $replyData */
+    /** @var ReplyData|null $replyData */
     private $replyData;
 
     /** @var string $addressInfoCode */
@@ -95,7 +95,6 @@ class FraudAnalysis implements \JsonSerializable, CieloSerializable
     /**
      * Fraud Analysis constructor.
      *
-     * @param null
     */
     public function __construct()
     {
@@ -372,7 +371,7 @@ class FraudAnalysis implements \JsonSerializable, CieloSerializable
     }
 
     /**
-     *  @param MerchantDefinedFields
+     *  @param MerchantDefinedFields $merchantDefinedField
      *  @return $this
      */
     public function addMerchnatDefinedFields(MerchantDefinedFields $merchantDefinedField)

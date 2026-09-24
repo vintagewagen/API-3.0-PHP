@@ -20,7 +20,6 @@ class Legs implements \JsonSerializable, CieloSerializable
     /**
      * Legs constructor.
      *
-     * @param null
     */
     public function __construct()
     {

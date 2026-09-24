@@ -19,7 +19,7 @@ class Sale implements \JsonSerializable
     /**
      * Sale constructor.
      *
-     * @param null $merchantOrderId
+     * @param string|null $merchantOrderId
      */
     public function __construct($merchantOrderId = null)
     {

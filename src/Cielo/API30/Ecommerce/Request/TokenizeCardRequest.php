@@ -17,8 +17,6 @@ class TokenizeCardRequest extends AbstractRequest
 {
 
     private $environment;
-    /** @var Merchant $merchant */
-    private $merchant;
 
 	/**
 	 * CreateCardTokenRequestHandler constructor.
@@ -32,7 +30,6 @@ class TokenizeCardRequest extends AbstractRequest
     {
         parent::__construct($merchant, $logger, $httpClient);
 
-        $this->merchant    = $merchant;
         $this->environment = $environment;
     }
 

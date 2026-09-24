@@ -33,7 +33,6 @@ class ZeroAuth implements \JsonSerializable, CieloSerializable
     /**
      * ZeroAuth constructor.
      *
-     * @param null
     */
     public function __construct()
     {

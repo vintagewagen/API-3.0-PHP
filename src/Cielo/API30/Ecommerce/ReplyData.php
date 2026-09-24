@@ -48,7 +48,6 @@ class ReplyData implements \JsonSerializable, CieloSerializable
     /**
      * Travel constructor.
      *
-     * @param null
     */
     public function __construct()
     {

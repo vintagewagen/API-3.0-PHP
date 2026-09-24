@@ -36,7 +36,7 @@ class QueryRecurrentPaymentRequest extends AbstractRequest
     /**
      * @param $recurrentPaymentId
      *
-     * @return null
+     * @return \Cielo\API30\Ecommerce\RecurrentPayment
      * @throws \Cielo\API30\Ecommerce\Request\CieloRequestException
      * @throws \RuntimeException
      */

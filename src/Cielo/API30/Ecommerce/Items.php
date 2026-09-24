@@ -50,13 +50,12 @@ class Items implements \JsonSerializable, CieloSerializable
     /** @var string $velocityHedge */
     private $velocityHedge;
 
-    /** @var string $passenger */
+    /** @var Passenger|null $passenger */
     private $passenger;
 
     /**
      * Items constructor.
      *
-     * @param null
     */
     public function __construct()
     {

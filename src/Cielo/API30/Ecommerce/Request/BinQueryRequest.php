@@ -36,7 +36,7 @@ class BinQueryRequest extends AbstractRequest
     /**
      * @param $cardDigits
      *
-     * @return null
+     * @return \Cielo\API30\Ecommerce\BinQuery
      * @throws \Cielo\API30\Ecommerce\Request\CieloRequestException
      * @throws \RuntimeException
      */

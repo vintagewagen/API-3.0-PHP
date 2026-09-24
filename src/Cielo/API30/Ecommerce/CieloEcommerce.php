@@ -33,7 +33,7 @@ class CieloEcommerce
 	 *
 	 * @param Merchant $merchant
 	 *            The merchant credentials
-	 * @param Environment environment
+	 * @param Environment|null $environment
 	 *            The environment: {@link Environment::production()} or
 	 *            {@link Environment::sandbox()}
 	 * @param LoggerInterface|null $logger
@@ -125,7 +125,7 @@ class CieloEcommerce
      * @param integer $amount
      *            Order value in cents
      *
-     * @return Sale The Sale with authorization, tid, etc. returned by Cielo.
+     * @return Payment O Payment cancelado (Status, ReturnCode, VoidedAmount...).
      *
      * @throws \Cielo\API30\Ecommerce\Request\CieloRequestException if anything gets wrong.
      *
@@ -200,9 +200,9 @@ class CieloEcommerce
 
     /**
      *  Consulta Zero Auth
-     *  @param CreditCard
-     * 
-     *  @return mixed
+     *  @param CreditCard $creditCard
+     *
+     *  @return ZeroAuth
      */
     public function zeroAuth(CreditCard $creditCard) 
     {

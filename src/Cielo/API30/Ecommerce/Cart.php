@@ -17,13 +17,12 @@ class Cart implements \JsonSerializable, CieloSerializable
     /** @var string $returnsAccepted */
     private $returnsAccepted;
 
-    /** @var string $items */
+    /** @var Items[]|null $items */
     private $items;
 
     /**
      * Cart constructor.
      *
-     * @param null
     */
     public function __construct()
     {
@@ -104,7 +103,7 @@ class Cart implements \JsonSerializable, CieloSerializable
     }
 
     /**
-     *  @param Items
+     *  @param Items $item
      *  @return $this
      *  Adiciona um Item ao payload do carrinho
      */

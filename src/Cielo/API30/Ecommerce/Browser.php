@@ -34,7 +34,6 @@ class Browser implements \JsonSerializable, CieloSerializable
      /**
      * Browser constructor.
      *
-     * @param null
     */
     public function __construct()
     {

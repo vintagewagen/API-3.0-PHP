@@ -21,13 +21,12 @@ class Travel implements \JsonSerializable, CieloSerializable
     /** @var string $route */
     private $route;
 
-    /** @var string $legs */
+    /** @var Legs[]|null $legs */
     private $legs;
 
     /**
      * Travel constructor.
      *
-     * @param null
     */
     public function __construct()
     {
